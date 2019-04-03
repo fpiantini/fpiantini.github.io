@@ -1,15 +1,13 @@
 ---
 layout: post
-title:  "How to setup a NodeJS client project in a quite modern way (Linux)"
-date:   2019-04-01 11:48:00 +0100
-categories: javascript nodejs programming webpack
+title:  "How to setup (and develop) a Github.io page using Jekyll (Linux)"
+date:   2019-03-29 08:27:00 +0100
+categories: jekyll github.io
 ---
 
-- Install a decent modern version of nodejs
+Refer to [help page on github][github-help]
 
-- 
-
-
+Short guide:
 
 - Check if you have, or install, Ruby > 2.1.0 + Gem
 
