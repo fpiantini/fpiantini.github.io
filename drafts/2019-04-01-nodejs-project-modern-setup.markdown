@@ -1,83 +1,138 @@
 ---
 layout: post
-title:  "How to setup (and develop) a Github.io page using Jekyll (Linux)"
-date:   2019-03-29 08:27:00 +0100
-categories: jekyll github.io
+title:  "How to setup a NodeJS client project in a quite modern way (Linux)"
+date:   2019-04-01 11:48:00 +0100
+categories: javascript nodejs programming webpack web
 ---
 
-Refer to [help page on github][github-help]
+In this page we well see how to setup a quite modern development for a frontend web application using tools like npm, webpack, babel, etc.
 
-Short guide:
+You can refer to the [jsmodernsetup][jsmodernsetup] repository on github to check the modification done on the variuos steps.
 
-- Check if you have, or install, Ruby > 2.1.0 + Gem
+## Prerequisites, project creation and `webpack` installation
 
-- Install `bundler` and `jekyll` if necessary:
+- Install a decent modern version of [nodejs][nodejs]
+
+- Using `npm`, install [yarn][yarn] at global scope:
 
 ```
-$ sudo gem install bundler jekyll
+$ npm install --global yarn
 ...
 $ _
 ```
 
-- Initialize and empty directory, enters it and create a `Gemfile` with the following content:
+- Create a directory for the project and enter it:
 
 ```
-source 'https://rubygems.org'
-gem 'github-pages', group: :jekyll_plugins
-```
-
-- Downloads necessary gems:
-
-```
-$ bundle install
-....
+$ mkdir myproject
+$ cd myproject
 $ _
 ```
 
-- Initialize an empy jekyll site on a new directory:
+## Step 1: `npm init`
+
+Initialize the project with `npm init`, entering all the requested data:
 
 ```
-$ bundle exec jekyll MY_JEKYLL_DIR
+$ npm init
 ...
-$ cd MY_JEKYLL_DIR
 $ _
 ```
+After this a `package.json` file containing the project information is created in the project directory. This file can be freely modified if some of the information entered was wrong.
 
-- Change the generated `Gemfile` in the following way:
-   - comment the line that starts with `gem "jekyll", ...`
-   - uncomment the line that starts with `gem "github-pages",...`
+Check the [step-1][repo-step-1] of the sample repo.
 
-- Initialize a git repo in the directory:
+
+## Step 2: install webpack + webpack accessories
+
+Install webpack + webpack accessories as development tools (use the `-D` option):
 
 ```
-$ git init
-...
-$ git add .
-...
-$ git commit -m "initialized jekyll site"
+$ yarn add -D webpack webpack-cli webpack-dev-server html-webpack-plugin
 ...
 $ _
 ```
 
-- Connect to the remote repository on Github to host the pages and push the modification:
+NOTE: using `yarn` to manage packages, all the information about the installed modules are in the `yarn.lock` file, and all the modules are in the `node_modules` directory. If you are using some configuration control program (e.g. `git`) this directory shall not be placed under configuration control (e.g. add it to the `.gitignore` file). The `node_modules` directory can be recreated (e.g. after a fresh clone) using the `yarn install` command.
 
+See the [step-2][repo-step-2] of the sample repo to check the modification introduced in this phase.
+
+## Preparing a simple "webapp"
+
+Inside the project directory create an `src` directory and create the following `html` file inside it:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <title>Getting Started</title>
+  </head>
+  <body>
+    Hello World!
+  </body>
+</html>
 ```
-$ git remote add origin git@github.com:<username>/<username>.github.io.git
-...
-$ git push -u origin master
-...
-$ _
+
+Inside the `src` directory create a `js` directory and create inside it the `main.js` file with some javascript code:
+
+```javascript
+console.log('Random JS. The answer is... 42');
 ```
 
-To test the site locally launch the following command:
+In the repo, check the [step-3][repo-step-3].
 
+## Using webpack #1: generating the distribution from source
+
+The first thing that webpack is able to do is to pack the source files in a deploy area. For the moment we prepare just the configuration necessary to copy the file reducing the processing to the bare minimum.
+
+To work webpack needs a configuration file `webpack.config.js`.
+
+```javascript
+const path = require('path');
+
+module.exports = {
+    entry: './src/js/main.js',
+    output: {
+        path: path.resolve(__dirname, 'dist')
+        filename: 'js/bundle.js',
+    },
+    plugins: [
+    new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: './src/index.html'
+    }),
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    'loader': 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
+        ]
+    },
+};
 ```
-$ bundle exec jekyll serve
-...
-```
 
-and open the `http://localhost:4000` page to see the result.
 
-To check the page online on Github pages, open the URL `https://<username>.github.io/`
 
-[github-help]: https://help.github.com/en/articles/setting-up-your-github-pages-site-locally-with-jekyll
+
+
+## `webpack` configuration
+
+
+
+
+To be completed
+
+
+[repo-step-2]: https://to-be-completed
+[repo-step-2]: https://github.com/fpiantini/jsmodernsetup/commit/d9bb525135c4cd0aaddec10a3360676e204df7a9
+[repo-step-1]: https://github.com/fpiantini/jsmodernsetup/commit/8bcfd010851e4b967d90f2d70b8661cb97c990d0
+[jsmodernsetup]: https://github.com/fpiantini/jsmodernsetup
+[nodejs]: https://nodejs.org/
+[yarn]: https://yarnpkg.com/
