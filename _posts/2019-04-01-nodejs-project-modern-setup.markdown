@@ -16,17 +16,14 @@ You can refer to the [jsmodernsetup][jsmodernsetup] repository on github to chec
 - Using `npm`, install [yarn][yarn] at global scope:
 
 ```
-$ npm install --global yarn
-...
-$ _
+npm install --global yarn
 ```
 
 - Create a directory for the project and enter it:
 
 ```
-$ mkdir myproject
-$ cd myproject
-$ _
+mkdir myproject
+cd myproject
 ```
 
 ## Step 1: `npm init`
@@ -34,9 +31,7 @@ $ _
 Initialize the project with `npm init`, entering all the requested data:
 
 ```
-$ npm init
-...
-$ _
+npm init
 ```
 After this a `package.json` file containing the project information is created in the project directory. This file can be freely modified if some of the information entered was wrong.
 
@@ -48,16 +43,14 @@ Check the [step-1][repo-step-1] of the sample repo.
 Install webpack + webpack accessories as development tools (use the `-D` option):
 
 ```
-$ yarn add -D webpack webpack-cli webpack-dev-server html-webpack-plugin
-...
-$ _
+yarn add -D webpack webpack-cli webpack-dev-server html-webpack-plugin
 ```
 
 NOTE: using `yarn` to manage packages, all the information about the installed modules are in the `yarn.lock` file, and all the modules are in the `node_modules` directory. If you are using some configuration control program (e.g. `git`) this directory shall not be placed under configuration control (e.g. add it to the `.gitignore` file). The `node_modules` directory can be recreated (e.g. after a fresh clone) using the `yarn install` command.
 
 See the [step-2][repo-step-2] of the sample repo to check the modification introduced in this phase.
 
-## Preparing a simple "webapp"
+## Step 3: Preparing a simple "webapp"
 
 Inside the project directory create an `src` directory and create the following `html` file inside it:
 
@@ -81,7 +74,7 @@ console.log('Random JS. The answer is... 42');
 
 In the repo, check the [step-3][repo-step-3].
 
-## Using webpack #1: generating the distribution from source
+## Step 4: Using webpack #1. Generating the distribution from source
 
 The first thing that webpack is able to do is to pack the source files (html, style sheet and javascript) in a release area that can be later used for deployment. To execute webpack commands we need a webpack configuration file named `webpack.config.js`. For the moment we prepare just the configuration necessary to copy only the files we have (`index.html` and `main.js`) reducing the processing to the bare minimum.
 
@@ -111,9 +104,7 @@ module.exports = {
 To generate the release files enter the following command:
 
 ```
-$ npx webpack --mode development
-...
-$ _
+npx webpack --mode development
 ```
 
 Check the files in the `dist` directory and try to understand what happened.
@@ -124,7 +115,7 @@ For additional information, check the documentation of [webpack][webpack] and [H
 
 In the example repo, check the [step-4][repo-step-4].
 
-## Add some rules to the `package.json` file
+## Step 5: Add some rules to the `package.json` file
 
 The `package.json` file can be used to add shortcut to frequently used commands.
 For example add the `"dev"` and `"build"` items in the `script` section of the file:
@@ -140,26 +131,22 @@ For example add the `"dev"` and `"build"` items in the `script` section of the f
 After this, to build the distribution file in development mode use the command:
 
 ```
-$ npm run dev
-...
-$ _
+npm run dev
 ```
 
 and to build in production mode, use the command:
 
 ```
-$ npm run build
-...
-$ _
+npm run build
 ```
 
 In the example repo, check the [step-5][repo-step-5].
 
-## Using webpack #2: webpack development server
+## Step 6. Using webpack #2. The webpack development server
 
 The [webpack development server][webpack-dev-server]is an useful tool that can be used during development to update in real-time the browser when a source file is modified. To use it the following steps shall be done:
 
-- Add a `devServer` stanza in the `webpack.config.js`:
+- Add a `devServer` section in the `webpack.config.js`:
 
 ```javascript
     devServer: {
@@ -175,9 +162,7 @@ The [webpack development server][webpack-dev-server]is an useful tool that can b
 To start the development server enter the command:
 
 ```
-$ npm run start
-...
-
+npm run start
 ```
 
 This starts the server to localhost on port 8080. A Firefox tab shall be automatically opened and the main page of the application should be shown. To stop server hot Ctrl-C in the terminal where you launch it.
@@ -186,18 +171,19 @@ NOTE: the argument to the `--open` option (`firefox` in the example) can be chan
 
 Check the [step-6][repo-step-6] in the repo.
 
-## Babel
+## Step 7: Installing and using Babel
 
-[Babel][babel] is a compiler that translates modern javascript code in a format understable by all browsers. 
+[Babel][babel] is a compiler that translates modern javascript code in a format understable by all browsers. This section explains how to install babel, and how to add the necessary components and configuration to use it inside webpack.
 
 To install it enter the following command:
 
 ```
-$ yarn add -D babel-loader @babel/core @babel/preset-env
-...
-$ _
+yarn add -D babel-loader@7 @babel/core @babel/preset-env
 ```
-add the following stanza to the `webpack.config.js` file:
+
+NOTE: `babel-loader`is the package which make it possible to use Babel in webpack.
+
+To activate the `babel` compiler when a webpack command is entered, the following section shall be added to the `webpack.config.js` file:
 
 ```javascript
     module: {
@@ -215,7 +201,7 @@ add the following stanza to the `webpack.config.js` file:
         ]
     }
 ```
-and prepare the `.babelrc` configuration file with, for example, the following content:
+Prepare a `.babelrc` configuration file with, for example, the following content:
 
 ```
 {
@@ -232,8 +218,52 @@ and prepare the `.babelrc` configuration file with, for example, the following c
 }
 ```
 
-After this when we recompile our site using the `npm run dev` or `npm run 
+After this when we recompile our site using the `npm run dev` or `npm run build` the `bundle.js` generated in the `dist` is generated by babel taking into account the compatibility rules specified in `.babelrc`.
 
+**NOTE:** with the advent of babel v. 7 some packages inside the npm system was renamed:
+
+- `babel-core` becomes `@babel/core`
+- `babel-preset-env` becomes `@babel/preset-env`
+
+For this reason the command we gave to install babel use the new "@babel" components.
+After this setup, during compilation using babel, it is possible that some errors are generated by packages that still refers to old packages sintax. For this reason can happen that the old babel packages needs to be added too. It is important to install the right version, so if you have this kind of problem (like we have in april 2019 when this guide was written), enter the following command to install the "compatibility" packages:
+
+```
+yarn add -D babel-core@^7.0.0-0 babel-preset-env@^7.0.0-0
+```
+
+In the example repo, check the [step-7][repo-step-7].
+
+
+## Step 8: Installing the babel polyfill component
+
+**NOTE:** this is an optional step, that shall be done only if your source code uses advanced javascript and HTML concepts that are not supported by all browser. 
+
+From [wikipedia][wikipedia-polyfill]: _"In web development, a polyfill is code that implements a feature on web browsers that do not support the feature"._
+
+Babel provides an implementation of a polyfill library that can be installed with the following command:
+
+```
+yarn add -D @babel/polyfill
+```
+
+The polyfill library can increase considerably the size of the generated `bundle.js` file. To avoid this only the necessary polyfill code shall be included in the final bundle. A way to do this, is to [use the `useBuiltIns` option][polyfill-usebuiltins] in the presets section of the `.babelrc` file:
+
+```
+    ["@babel/preset-env", {
+        "useBuiltIns": "entry"
+    }],
+```
+
+For additional info on usage of the polyfill library, check the babel documentation.
+
+**NOTE:** also for the polyfill babel component there was a change of nomenclature when the v. 7 was released. For compatibility reasons it can happen that you have to install the old `babel-polyfill` package. In this case it is important to install the correct version:
+
+```
+yarn add -D babel-polyfill@\^7.0.0-0
+```
+
+In the example repo, check the [step-8][repo-step-8].
 
 [jsmodernsetup]: https://github.com/fpiantini/jsmodernsetup
 [nodejs]: https://nodejs.org/
@@ -242,6 +272,8 @@ After this when we recompile our site using the `npm run dev` or `npm run
 [babel]: https://babeljs.io/
 [html-webpack-plugin]: https://github.com/jantimon/html-webpack-plugin
 [webpack-dev-server]: https://github.com/webpack/webpack-dev-server
+[wikipedia-polyfill]: https://en.wikipedia.org/wiki/Polyfill_(programming)
+[polyfill-usebuiltins]: https://babeljs.io/docs/en/babel-preset-env#usebuiltins
 
 [repo-step-1]: https://github.com/fpiantini/jsmodernsetup/commit/8bcfd010851e4b967d90f2d70b8661cb97c990d0
 [repo-step-2]: https://github.com/fpiantini/jsmodernsetup/commit/d9bb525135c4cd0aaddec10a3360676e204df7a9
@@ -249,3 +281,5 @@ After this when we recompile our site using the `npm run dev` or `npm run
 [repo-step-4]: https://github.com/fpiantini/jsmodernsetup/commit/f61ae944b72195818a1891f693bdd20d904f778c
 [repo-step-5]: https://github.com/fpiantini/jsmodernsetup/commit/7263ab8b1d87f69fd01fab842f74463af61ea13f
 [repo-step-6]: https://github.com/fpiantini/jsmodernsetup/commit/7f56952eb8566e174295389bf3bd11d9c7c73908
+[repo-step-7]: https://github.com/fpiantini/jsmodernsetup/commit/35272b2d1b7b4c936eecbeda14c70bf44ff1739b
+[repo-step-8]: https://github.com/fpiantini/jsmodernsetup/commit/7467c322d65d28f0e992d8ecf2ebd09152d601d7
