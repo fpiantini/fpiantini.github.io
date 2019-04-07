@@ -265,6 +265,54 @@ yarn add -D babel-polyfill@\^7.0.0-0
 
 In the example repo, check the [step-8][repo-step-8].
 
+## Step 8: adding a CSS style sheet
+
+In this step we add a CSS style sheet to the project.
+
+First, the `style-loader` and `css-loader` components shall be added to the project (as development modules):
+
+```
+yarn add -D style-loader css-loader
+```
+
+
+Then we add a CSS style sheet to the project. In our sample project, we add a `style.css` file in the `src` directory with a minimal content, just to change the color of the text displayed in the page:
+
+```css
+* {
+        color: red;
+}
+```
+
+After this, the proper configuration section shall be added to the `webpack.config.js` file:
+
+```javascript
+...
+module.exports = {
+    ...
+    module: {
+        rules: [
+            { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+        ]
+    }
+};
+```
+
+and an import line shall be added to the `src/js/main.js` file:
+
+```javascript
+import './style.css';
+```
+
+After this, if we restart the `webpack-web-server` and reopen the page, the text present in the web page will be colored in red.
+
+See the [step-9][repo-step-9] in the example repo.
+
+## Credits
+
+- _["Un 'semplice' index.html nel 2018"][develer-blog-article]_ by Tommaso Visconti, Deverer blog, november 2018 (in italian language)
+
+
 [jsmodernsetup]: https://github.com/fpiantini/jsmodernsetup
 [nodejs]: https://nodejs.org/
 [yarn]: https://yarnpkg.com/
@@ -274,6 +322,7 @@ In the example repo, check the [step-8][repo-step-8].
 [webpack-dev-server]: https://github.com/webpack/webpack-dev-server
 [wikipedia-polyfill]: https://en.wikipedia.org/wiki/Polyfill_(programming)
 [polyfill-usebuiltins]: https://babeljs.io/docs/en/babel-preset-env#usebuiltins
+[develer-blog-article]: http://develer-blog.tumblr.com/post/179853716064/un-semplice-indexhtml-nel-2018
 
 [repo-step-1]: https://github.com/fpiantini/jsmodernsetup/commit/8bcfd010851e4b967d90f2d70b8661cb97c990d0
 [repo-step-2]: https://github.com/fpiantini/jsmodernsetup/commit/d9bb525135c4cd0aaddec10a3360676e204df7a9
@@ -283,3 +332,4 @@ In the example repo, check the [step-8][repo-step-8].
 [repo-step-6]: https://github.com/fpiantini/jsmodernsetup/commit/7f56952eb8566e174295389bf3bd11d9c7c73908
 [repo-step-7]: https://github.com/fpiantini/jsmodernsetup/commit/35272b2d1b7b4c936eecbeda14c70bf44ff1739b
 [repo-step-8]: https://github.com/fpiantini/jsmodernsetup/commit/7467c322d65d28f0e992d8ecf2ebd09152d601d7
+[repo-step-9]: https://github.com/fpiantini/jsmodernsetup/commit/8a2a59a7bded2a77ba1ee1cf40e629a26b9fd629
