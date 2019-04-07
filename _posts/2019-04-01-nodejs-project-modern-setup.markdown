@@ -265,7 +265,7 @@ yarn add -D babel-polyfill@\^7.0.0-0
 
 In the example repo, check the [step-8][repo-step-8].
 
-## Step 8: adding a CSS style sheet
+## Step 9: adding a CSS style sheet
 
 In this step we add a CSS style sheet to the project.
 
