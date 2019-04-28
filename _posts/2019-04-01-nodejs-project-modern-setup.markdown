@@ -11,7 +11,7 @@ You can refer to the [jsmodernsetup][jsmodernsetup] repository on github to chec
 
 ## Prerequisites, project creation and `webpack` installation
 
-- Install a decent modern version of [nodejs][nodejs]
+- Install a decent modern version of [nodejs][nodejs]. Follow the installation instruction for example at the [githup project page][nodejs-install]
 
 - Using `npm`, install [yarn][yarn] at global scope:
 
@@ -315,6 +315,7 @@ See the [step-9][repo-step-9] in the example repo.
 
 [jsmodernsetup]: https://github.com/fpiantini/jsmodernsetup
 [nodejs]: https://nodejs.org/
+[nodejs-install]: https://github.com/nodejs/help/wiki/Installation
 [yarn]: https://yarnpkg.com/
 [webpack]: https://webpack.js.org/
 [babel]: https://babeljs.io/
